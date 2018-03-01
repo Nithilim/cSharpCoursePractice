@@ -1,92 +1,287 @@
 ﻿using System;
 
+
+//Programa teisingai veikia tik su -999 iki 999 vertem. Su vertem iki 19 tukstanciu parodo viska teisingai tik tukstanciu dalies linksnis blogas.
+//Su 19 ir didesnem vertem daro klaidas, pameta skaicius. Sitas klaidas, kai turesiu daugiau laiko istaisysiu.
+//Taip pat, reikes sudet veiksmai kurie yra apibrezti su inputNum reziais reikes perkelt i funkcijas ir inputNum kintamaji naudot kaip 'ref' kad verte inputNum adrese pakistu.
+
 class Program
 {
 
     static void Main()
     {
-        // TODO : keiskite FROM..TO skaicius pagal tai kiek spesite padaryt uzduociu. (-19...19, -99..99, ir tt.)
-        // min skaicius 
-        const int FROM_NUMBER = -9;
-        // max skaicius 
-        const int TO_NUMBER = 9;
-
-        string inputString = "";
-        int inputNumber = 0;
-
-        Console.Write("Sveiki!");
-        while (inputString != " ")
+        bool num = true;
+        bool minus = false;
+        int temp = 0;
+        int temp1 = 0;
+        Console.WriteLine("iveskit skaiciu");
+        string input = Console.ReadLine();
+        for (int i = 0; (i < input.Length); i++)
         {
-            Console.Write("\n(Enter SPACE to exit.)\nIveskite skaiciu:");
-            inputString = Console.ReadLine();
-            if (checkIfGoodNumber(inputString))
+            char symbol = input[i];
+            minus = checkMinus(symbol, i);
+            if (minus == false)
             {
-                Console.WriteLine("Skaicius teisingas!");
-                inputNumber = Convert.ToInt32(inputString);
-                if (checkIfNumberInRange(FROM_NUMBER, TO_NUMBER, inputNumber))
+                if (checkNum(symbol) == false)
                 {
-                    Console.WriteLine("Skaicius {0} zodziais: {1}", inputNumber, changeNumberToText(inputNumber));
+                    num = false;
+                    break;
                 }
                 else
                 {
-                    Console.WriteLine("Blogas skaicius {0}, prasau ivesti skaiciu reziuose: {1}..{2}", inputString, FROM_NUMBER, TO_NUMBER);
+                    num = true;
                 }
             }
             else
             {
-                Console.WriteLine("Ivesti duomenys:{0} nera skaicius!", inputString);
+                Console.Write("Minus ");
             }
         }
+        if (num == false)
+        {
+            Console.WriteLine("Blogas ivedimas");
+        }
+        else
+        {
+            input = input.Trim('-');
+            int inputNum = Convert.ToInt32(input);
+            if (inputNum < 1000001 && inputNum > 999)
+            {
+                if (inputNum == 1000000)
+                {
+                    Console.WriteLine("Milijonas");
+                }
+                temp = inputNum / 1000;
+                if (temp >= 1 && temp < 20)
+                {
+                    Console.Write(printNum(temp));
+                    Console.Write(printNum3(temp));
+                    inputNum = inputNum % 1000;
+                }
+                if (temp > 19 && temp < 100)
+                {
+                    temp = temp - (temp % 10);
+                    Console.Write(printNum1(temp));
+                    Console.Write(printNum3(temp));
+                    inputNum = inputNum % 1000;
+                }
+                if (temp > 99 && temp < 1000)
+                {
+                    temp1 = temp % 100;
+                    if (temp1 >= 1 && temp1 < 20)
+                    {
+                        Console.Write(printNum(temp1));
+                    }
+                    else
+                    {
+                        temp1 = temp1 - (temp1 % 10);
+                        Console.Write(printNum1(temp1));
+                        temp1 = temp - (temp % 100);
+                        Console.Write(printNum2(temp1));
+                        Console.Write(printNum3(temp));
+                    }
+                    inputNum = inputNum % 1000;
+                }
+            }
+            if (inputNum < 1000 && inputNum > 99)
+            {
+                temp = inputNum / 100;
+                if (temp > 1)
+                {
+                    Console.Write(printNum(temp));
+                    temp = inputNum % 100;
+                    temp = inputNum - temp;
+                    Console.Write(printNum2(temp));
+                    inputNum = inputNum % 100;
+                }
+                else
+                {
+                    temp = inputNum % 100;
+                    temp = inputNum - temp;
+                    Console.Write(printNum2(temp));
+                    inputNum = inputNum % 100;
+                }
+            }
+            if (inputNum < 100 && inputNum > 19)
+            {
+                temp = inputNum % 10;
+                temp = inputNum - temp;
+                Console.Write(printNum1(temp));
+                inputNum = inputNum % 10;
+            }
+            temp = inputNum;
+            if (inputNum >= 0 && inputNum < 20 && temp > 0)
+            {
+                Console.Write(printNum(inputNum));
 
-        Console.WriteLine("\nAciu uz demesi, viso gero.");
+            }
+
+        }
         Console.ReadKey();
     }
-
-    // bendra funkcija apjungti visom funkcijom kurias jus sukursit.
-    static string changeNumberToText(int number)
+    static bool checkMinus(char input, int i)
     {
-        // TODO : pakeiskite sita funkcija pagal savo poreiki. (tiek kiek skaiciu spesite apdorot.)
-        return changeOnesToText(number);
+        bool minus = false;
+        if (i == 0)
+        {
+            if (input == '-')
+            {
+                minus = true;
+            }
+        }
+        return (minus);
+    }
+    static bool checkNum(char symbol)
+    {
+        bool NumResult = false;
+        if (symbol != '0' && symbol != '1' && symbol != '2' && symbol != '3' && symbol != '4' && symbol != '5' && symbol != '6' &&
+                    symbol != '7' && symbol != '8' && symbol != '9')
+        {
+            NumResult = false;
+        }
+        else
+        {
+            NumResult = true;
+        }
+        return (NumResult);
+    }
+    static string printNum(int num)
+    {
+        string StringNumber = "Perdaug ivesta.";
+        if (num < 10)
+        {
+            switch (num)
+            {
+                case 0:
+                    StringNumber = "nulis";
+                    break;
+                case 1:
+                    StringNumber = "vienas";
+                    break;
+                case 2:
+                    StringNumber = "du";
+                    break;
+                case 3:
+                    StringNumber = "trys";
+                    break;
+                case 4:
+                    StringNumber = "keturi";
+                    break;
+                case 5:
+                    StringNumber = "penki";
+                    break;
+                case 6:
+                    StringNumber = "sesi";
+                    break;
+                case 7:
+                    StringNumber = "septyni";
+                    break;
+                case 8:
+                    StringNumber = "astuoni";
+                    break;
+                case 9:
+                    StringNumber = "devyni";
+                    break;
+            }
+        }
+        if (num > 9 && num < 20)
+        {
+            switch (num)
+            {
+                case 10:
+                    StringNumber = "desimt ";
+                    break;
+                case 11:
+                    StringNumber = "vienuolika ";
+                    break;
+                case 12:
+                    StringNumber = "dvylika ";
+                    break;
+                case 13:
+                    StringNumber = "trylika ";
+                    break;
+                case 14:
+                    StringNumber = "keturiolika ";
+                    break;
+                case 15:
+                    StringNumber = "penkiolika ";
+                    break;
+                case 16:
+                    StringNumber = "sesiolika ";
+                    break;
+                case 17:
+                    StringNumber = "septyniolika ";
+                    break;
+                case 18:
+                    StringNumber = "astuoniolika ";
+                    break;
+                case 19:
+                    StringNumber = "devyniolika ";
+                    break;
+            }
+        }
+        return (StringNumber);
+    }
+    static string printNum1(int num)
+    {
+        string StringNumber = "Perdaug ivesta.";
+        if (num > 19 && num < 100)
+        {
+            switch (num)
+            {
+                case 20:
+                    StringNumber = " dvidesimt ";
+                    break;
+                case 30:
+                    StringNumber = " trisdesimt ";
+                    break;
+                case 40:
+                    StringNumber = " keturiasdesimt ";
+                    break;
+                case 50:
+                    StringNumber = " penkiasdesimt ";
+                    break;
+                case 60:
+                    StringNumber = " sesiasdesimt ";
+                    break;
+                case 70:
+                    StringNumber = " septyniasdesimt ";
+                    break;
+                case 80:
+                    StringNumber = " astuoniasdesimt ";
+                    break;
+                case 90:
+                    StringNumber = " devyniasdesimt ";
+                    break;
+            }
+        }
+        return (StringNumber);
+    }
+    static string printNum2(int num)
+    {
+        string StringNumber = "Perdaug ivesta.";
+        if (num == 100)
+        {
+            StringNumber = " simtas ";
+        }
+        else
+        {
+            StringNumber = " simtai ";
+        }
+        return (StringNumber);
+    }
+    static string printNum3(int num)
+    {
+        string StringNumber = "Perdaug ivesta.";
+        if (num == 1)
+        {
+            StringNumber = " tukstantis ";
+        }
+        else
+        {
+            StringNumber = " tukstanciu ";
+        }
+        return (StringNumber);
     }
 
-    // funkcija gauna string skaiciu, patikrina ar skaicius teisingu formatu. Pvz: "123", "-123" grazina true. "12a3", "1-23" grazina false.
-    static bool checkIfGoodNumber(string dataToCheck)
-    {
-        throw new NotImplementedException("TODO: grazinkite true, jei tekstas yra teisingas skaicius.");
-    }
-
-    // funkcija gauna true jei skaicius checkNumber yar tarp fromNumber ir toNumber (imtinai)
-    private static bool checkIfNumberInRange(int fromNumber, int toNumber, int checkNumber)
-    {
-        throw new NotImplementedException("TODO: Patikrinkite ar checkNumber yar tarp skaiciu fromNumber,  toNumber");
-    }
-
-    // funkcija gauna int skaiciu, pakeicia ji i string teksta kuri zodziais nusako skaiciu. PVZ: -1684542 turi grazint - "minus vienas milijonas sesi simtai astuoniasdesimt keturi tukstanciai penki simtai keturiasdiasimt du"
-    static string changeOnesToText(int number)
-    {
-        throw new NotImplementedException("TODO: grazinkite skaiciu -9...9 zodziais.");
-    }
-
-    // TODO : sukurti funkcija kuri grazina skaiciu -19...19 zodziais - changeTeensToText
-
-    // TODO : sukurti funkcija kuri grazina skaiciu -99...99 zodziais - changeTensToText
-
-    // TODO : sukurti funkcija kuri grazina skaiciu -999...999 zodziais - changeHundredsToText
-
-    // TODO : sukurti funkcija kuri grazina skaiciu -9999...9999 zodziais - changeThousandsToText
-
-    // TODO : sukurti funkcija kuri grazina skaiciu -9999999...9999999 zodziais - changeMillionsToText
-
-    // TODO : sukurti funkcija kuri grazina skaiciu -9999999999...9999999999 zodziais - changeBilllionsToText
-
-
-
-    //Skaiciai zodziais:  
-    // "minus"; 
-    // "nulis", "vienas", "du", "trys", "keturi", "penki", "sesi", "septyni", "astuoni", "devyni"; 
-    // "desimt", "vienualika", "dvylika", "trylika", "keturiolika", "penkiolika", "sesiolika", "septyniolika", "astuoniolika", "devyniolika"; 
-    // "dvidesimt", "trisdesimt", "keturiasdesimt", "penkiasdesimt", "sesiasdesimt", "septyniasdesimt", "astuoniasdesimt", "devyniasdesimt"; 
-    // "simtas", "tukstantis", "milijonas", "milijardas"; 
-    // "simtai", "tukstanciai", "milijonai", "milijardai"; 
-    // "simtu", "tukstanciu", "milijonu", "milijardu"; 
 }
